@@ -217,23 +217,56 @@ onMounted(() => {
       function updateGallery() {
         const photo = photos[currentIndex]
         modal.innerHTML = `
-          <div style="text-align: center; max-width: 90%; max-height: 90%; position: relative; min-height: 600px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div style="text-align: center; width: 90%; height: 80vh; position: relative; display: flex; flex-direction: column;">
             <div style="position: absolute; top: 20px; left: 20px; color: white; font-size: 18px; z-index: 10001;">
               ${placeName} · ${currentIndex + 1}/${photos.length}
             </div>
             <div style="position: absolute; top: 20px; right: 20px; color: white; font-size: 24px; cursor: pointer; z-index: 10001;" onclick="this.parentElement.parentElement.remove()">
               ✕
             </div>
-            <img src="${photo.url}" 
-                 alt="${photo.caption}" 
-                 style="max-width: 100%; max-height: 80vh; object-fit: contain; border-radius: 8px;">
-            <div style="color: white; margin-top: 15px; font-size: 16px;">${photo.caption}</div>
+            
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center; margin: 20px 0;">
+              <img src="${photo.url}" 
+                   alt="${photo.caption}" 
+                   style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px;">
+            </div>
+            
+            <div style="color: white; font-size: 16px; margin: 10px 0;">${photo.caption}</div>
+            
             ${photos.length > 1 ? `
-              <div style="margin-top: 20px;">
+              <div style="margin: 20px 0;">
                 <button onclick="changePhoto(-1)" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-right: 10px;">← 上一张</button>
                 <button onclick="changePhoto(1)" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer;">下一张 →</button>
               </div>
-              <div style="margin-top: 15px; display: flex; justify-content: center; gap: 8px;">
+              <div style="margin: 15px 0; display: flex; justify-content: center; gap: 8px;">
+                ${photos.map((_, index) => `
+                  <div onclick="goToPhoto(${index})" 
+                       style="width: 12px; height: 12px; border-radius: 50%; background: ${index === currentIndex ? "white" : "rgba(255,255,255,0.3)"}; cursor: pointer;"></div>
+                `).join("")}
+              </div>
+            ` : ""}
+          </div>
+        `
+      }
+            </div>
+            <div style="position: absolute; top: 20px; right: 20px; color: white; font-size: 24px; cursor: pointer; z-index: 10001;" onclick="this.parentElement.parentElement.remove()">
+              ✕
+            </div>
+            
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center; margin: 20px 0;">
+              <img src="${photo.url}" 
+                   alt="${photo.caption}" 
+                   style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px;">
+            </div>
+            
+            <div style="color: white; font-size: 16px; margin: 10px 0;">${photo.caption}</div>
+            
+            ${photos.length > 1 ? `
+              <div style="margin: 20px 0;">
+                <button onclick="changePhoto(-1)" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-right: 10px;">← 上一张</button>
+                <button onclick="changePhoto(1)" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer;">下一张 →</button>
+              </div>
+              <div style="margin: 15px 0; display: flex; justify-content: center; gap: 8px;">
                 ${photos.map((_, index) => `
                   <div onclick="goToPhoto(${index})" 
                        style="width: 12px; height: 12px; border-radius: 50%; background: ${index === currentIndex ? 'white' : 'rgba(255,255,255,0.3)'}; cursor: pointer;"></div>
