@@ -21,6 +21,6 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/imfineandyou0827' }
     ],
     outline: 'deep',
-    outlineTitle: '本页目录',
+    outlineTitle: '目录',
   }
 }) 
