@@ -146,7 +146,7 @@ onMounted(() => {
         date: '2023年',
         icon: '🏜️',
         photos: [
-          { url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', caption: '天山天池' },
+          { url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2560&h=1440&fit=crop', caption: '天山天池' },
           { url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', caption: '吐鲁番葡萄' },
           { url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1080&h=1080&fit=crop', caption: '喀什古城' }
         ]
