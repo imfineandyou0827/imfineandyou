@@ -1,4 +1,13 @@
-<h1>CRTP note
+---
+title: C++设计模式笔记——CRTP
+lang: zh-CN
+date: 2024-07-03
+tags:
+  - 学习
+  - 笔记
+summary: CRTP
+---
+<h1>C++设计模式笔记——CRTP </h1>
 
 > CRTP(curiously recurring template pattern, 奇异递归模式)，这个名字奇怪的模式，是一种将继承和静态多态结合的技术。
 >
