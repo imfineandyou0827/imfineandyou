@@ -26,7 +26,8 @@ function generateIndex() {
     const filepath = path.join(NOTES_DIR, filename);
     const content = fs.readFileSync(filepath, 'utf-8');
     const { title, summary } = parseFrontmatter(content);
-    return `- [${title || filename.replace('.md','')}](${path.posix.join('notes', filename)})：${summary || ''}`;
+    const encodedFilename = encodeURIComponent(filename);
+    return `- [${title || filename.replace('.md','')}](${path.posix.join('notes', encodedFilename)})：${summary || ''}`;
   });
 
   const md = `# 笔记\n\n这里记录我的学习与思考笔记。\n\n---\n\n${entries.join('\n')}\n`;
