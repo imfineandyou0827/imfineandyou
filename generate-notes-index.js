@@ -1,4 +1,4 @@
-// 自动生成 docs/notes.md 目录脚本
+// 自动生成 docs/notes.md 目录脚本（支持文件夹分组）
 // 用法：node generate-notes-index.js
 
 import fs from 'fs';
@@ -20,19 +20,42 @@ function parseFrontmatter(content) {
   return { title, summary };
 }
 
-function generateIndex() {
-  const files = fs.readdirSync(NOTES_DIR).filter(f => f.endsWith('.md'));
-  const entries = files.map(filename => {
-    const filepath = path.join(NOTES_DIR, filename);
-    const content = fs.readFileSync(filepath, 'utf-8');
-    const { title, summary } = parseFrontmatter(content);
-    const encodedFilename = encodeURIComponent(filename);
-    return `- [${title || filename.replace('.md','')}](${path.posix.join('notes', encodedFilename)})：${summary || ''}`;
-  });
+function walk(dir, base = '') {
+  const groups = {};
+  const files = fs.readdirSync(dir);
+  for (const file of files) {
+    const fullPath = path.join(dir, file);
+    const relPath = base ? path.posix.join(base, file) : file;
+    const stat = fs.statSync(fullPath);
+    if (stat.isDirectory()) {
+      const sub = walk(fullPath, relPath);
+      for (const [k, v] of Object.entries(sub)) {
+        groups[k] = (groups[k] || []).concat(v);
+      }
+    } else if (file.endsWith('.md')) {
+      const group = base || '未分组';
+      groups[group] = groups[group] || [];
+      groups[group].push(relPath);
+    }
+  }
+  return groups;
+}
 
-  const md = `# 笔记\n\n这里记录我的学习与思考笔记。\n\n---\n\n${entries.join('\n')}\n`;
+function generateIndex() {
+  const groups = walk(NOTES_DIR);
+  let md = `# 笔记\n\n这里记录我的学习与思考笔记。\n\n---\n`;
+  for (const group of Object.keys(groups).sort()) {
+    md += `\n## ${group}\n`;
+    for (const relPath of groups[group].sort()) {
+      const absPath = path.join(NOTES_DIR, relPath);
+      const content = fs.readFileSync(absPath, 'utf-8');
+      const { title, summary } = parseFrontmatter(content);
+      const encodedPath = relPath.split('/').map(encodeURIComponent).join('/');
+      md += `- [${title || relPath.replace('.md','')}](${path.posix.join('notes', encodedPath)})：${summary || ''}\n`;
+    }
+  }
   fs.writeFileSync(OUTPUT_FILE, md, 'utf-8');
-  console.log('notes.md 已自动生成！');
+  console.log('notes.md 已自动分组生成！');
 }
 
 generateIndex(); 
