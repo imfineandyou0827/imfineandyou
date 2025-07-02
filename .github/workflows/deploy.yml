@@ -25,6 +25,14 @@ jobs:
       - name: Generate notes index
         run: node generate-notes-index.js
 
+      - name: Commit & Push updated notes.md
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/notes.md
+          git commit -m "chore: 自动同步最新 notes.md 目录 [skip ci]" || echo "No changes to commit"
+          git push
+
       - name: Build VitePress site
         run: pnpm run build
 
