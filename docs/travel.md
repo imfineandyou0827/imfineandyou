@@ -168,7 +168,7 @@ onMounted(() => {
                 <img src="${place.photos[0].url}" 
                      alt="${place.photos[0].caption}" 
                      style="width: 200px; height: 150px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid #ddd; margin-bottom: 8px;"
-                     onclick="showPhotoGallery('${place.name}', ${JSON.stringify(place.photos).replace(/"/g, '&quot;')})"
+                     onclick="showPhotoGallery('${place.name}')"
                      title="点击查看所有照片">
                 <div style="font-size: 12px; color: #666;">
                   📸 ${place.photos.length} 张照片 · 点击查看
@@ -195,8 +195,17 @@ onMounted(() => {
     }
     legend.addTo(map)
 
+    // 全局变量存储照片数据
+    window.placePhotos = {}
+    places.forEach(place => {
+      window.placePhotos[place.name] = place.photos
+    })
+
     // 全局函数：显示照片画廊
-    window.showPhotoGallery = function(placeName, photos) {
+    window.showPhotoGallery = function(placeName) {
+      const photos = window.placePhotos[placeName]
+      if (!photos || photos.length === 0) return
+      
       let currentIndex = 0
       
       // 创建模态框
@@ -217,7 +226,7 @@ onMounted(() => {
       function updateGallery() {
         const photo = photos[currentIndex]
         modal.innerHTML = `
-          <div style="text-align: center; width: 90%; height: 80vh; position: relative; display: flex; flex-direction: column;">
+          <div style="text-align: center; width: 100%; height: 100%; position: relative;">
             <div style="position: absolute; top: 20px; left: 20px; color: white; font-size: 18px; z-index: 10001;">
               ${placeName} · ${currentIndex + 1}/${photos.length}
             </div>
@@ -225,48 +234,20 @@ onMounted(() => {
               ✕
             </div>
             
-            <div style="flex: 1; display: flex; align-items: center; justify-content: center; margin: 20px 0;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 90%; max-height: 70vh;">
               <img src="${photo.url}" 
                    alt="${photo.caption}" 
                    style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px;">
             </div>
             
-            <div style="color: white; font-size: 16px; margin: 10px 0;">${photo.caption}</div>
+            <div style="position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%); color: white; font-size: 16px;">${photo.caption}</div>
             
             ${photos.length > 1 ? `
-              <div style="margin: 20px 0;">
+              <div style="position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);">
                 <button onclick="changePhoto(-1)" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-right: 10px;">← 上一张</button>
                 <button onclick="changePhoto(1)" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer;">下一张 →</button>
               </div>
-              <div style="margin: 15px 0; display: flex; justify-content: center; gap: 8px;">
-                ${photos.map((_, index) => `
-                  <div onclick="goToPhoto(${index})" 
-                       style="width: 12px; height: 12px; border-radius: 50%; background: ${index === currentIndex ? "white" : "rgba(255,255,255,0.3)"}; cursor: pointer;"></div>
-                `).join("")}
-              </div>
-            ` : ""}
-          </div>
-        `
-      }
-            </div>
-            <div style="position: absolute; top: 20px; right: 20px; color: white; font-size: 24px; cursor: pointer; z-index: 10001;" onclick="this.parentElement.parentElement.remove()">
-              ✕
-            </div>
-            
-            <div style="flex: 1; display: flex; align-items: center; justify-content: center; margin: 20px 0;">
-              <img src="${photo.url}" 
-                   alt="${photo.caption}" 
-                   style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px;">
-            </div>
-            
-            <div style="color: white; font-size: 16px; margin: 10px 0;">${photo.caption}</div>
-            
-            ${photos.length > 1 ? `
-              <div style="margin: 20px 0;">
-                <button onclick="changePhoto(-1)" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-right: 10px;">← 上一张</button>
-                <button onclick="changePhoto(1)" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer;">下一张 →</button>
-              </div>
-              <div style="margin: 15px 0; display: flex; justify-content: center; gap: 8px;">
+              <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px;">
                 ${photos.map((_, index) => `
                   <div onclick="goToPhoto(${index})" 
                        style="width: 12px; height: 12px; border-radius: 50%; background: ${index === currentIndex ? 'white' : 'rgba(255,255,255,0.3)'}; cursor: pointer;"></div>
