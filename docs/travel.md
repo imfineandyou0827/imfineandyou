@@ -311,47 +311,460 @@ onMounted(() => {
 
 ## 旅行记录
 
-### 2023年
+<div class="travel-timeline">
+  <div class="timeline-item">
+    <div class="timeline-dot">
+      <div class="dot-inner"></div>
+    </div>
+    <div class="timeline-card">
+      <div class="card-header">
+        <div class="travel-icon">🏛️</div>
+        <div class="travel-info">
+          <h3>北京之旅</h3>
+          <div class="travel-meta">
+            <span class="travel-date">2023年X月</span>
+            <span class="travel-location">📍 北京</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="travel-highlights">
+          <div class="highlight-item">
+            <span class="highlight-label">景点</span>
+            <span class="highlight-value">故宫、天安门、长城</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-label">感受</span>
+            <span class="highlight-value">历史文化底蕴深厚，值得深度游览</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-#### 北京之旅
-- **时间**：2023年X月
-- **景点**：故宫、天安门、长城
-- **感受**：历史文化底蕴深厚，值得深度游览
+  <div class="timeline-item">
+    <div class="timeline-dot">
+      <div class="dot-inner"></div>
+    </div>
+    <div class="timeline-card">
+      <div class="card-header">
+        <div class="travel-icon">🌆</div>
+        <div class="travel-info">
+          <h3>上海之行</h3>
+          <div class="travel-meta">
+            <span class="travel-date">2023年X月</span>
+            <span class="travel-location">📍 上海</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="travel-highlights">
+          <div class="highlight-item">
+            <span class="highlight-label">景点</span>
+            <span class="highlight-value">外滩、东方明珠、豫园</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-label">感受</span>
+            <span class="highlight-value">现代化与历史文化的完美融合</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-#### 上海之行
-- **时间**：2023年X月
-- **景点**：外滩、东方明珠、豫园
-- **感受**：现代化与历史文化的完美融合
+  <div class="timeline-item">
+    <div class="timeline-dot">
+      <div class="dot-inner"></div>
+    </div>
+    <div class="timeline-card">
+      <div class="card-header">
+        <div class="travel-icon">🏞️</div>
+        <div class="travel-info">
+          <h3>杭州游</h3>
+          <div class="travel-meta">
+            <span class="travel-date">2023年X月</span>
+            <span class="travel-location">📍 杭州</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="travel-highlights">
+          <div class="highlight-item">
+            <span class="highlight-label">景点</span>
+            <span class="highlight-value">西湖、灵隐寺、西溪湿地</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-label">感受</span>
+            <span class="highlight-value">人间天堂，风景如画</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-#### 杭州游
-- **时间**：2023年X月
-- **景点**：西湖、灵隐寺、西溪湿地
-- **感受**：人间天堂，风景如画
+  <div class="timeline-item">
+    <div class="timeline-dot">
+      <div class="dot-inner"></div>
+    </div>
+    <div class="timeline-card">
+      <div class="card-header">
+        <div class="travel-icon">🏔️</div>
+        <div class="travel-info">
+          <h3>西藏之旅</h3>
+          <div class="travel-meta">
+            <span class="travel-date">2023年X月</span>
+            <span class="travel-location">📍 拉萨</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="travel-highlights">
+          <div class="highlight-item">
+            <span class="highlight-label">景点</span>
+            <span class="highlight-value">布达拉宫、大昭寺、八廓街</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-label">感受</span>
+            <span class="highlight-value">雪域高原的神秘与神圣</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-#### 西藏之旅
-- **时间**：2023年X月
-- **景点**：布达拉宫、大昭寺、八廓街
-- **感受**：雪域高原的神秘与神圣
+  <div class="timeline-item">
+    <div class="timeline-dot">
+      <div class="dot-inner"></div>
+    </div>
+    <div class="timeline-card">
+      <div class="card-header">
+        <div class="travel-icon">⛰️</div>
+        <div class="travel-info">
+          <h3>冈仁波齐转山</h3>
+          <div class="travel-meta">
+            <span class="travel-date">2023年X月</span>
+            <span class="travel-location">📍 冈仁波齐</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="travel-highlights">
+          <div class="highlight-item">
+            <span class="highlight-label">景点</span>
+            <span class="highlight-value">冈仁波齐峰、玛旁雍错</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-label">感受</span>
+            <span class="highlight-value">世界中心的神山，心灵净化之旅</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-#### 冈仁波齐转山
-- **时间**：2023年X月
-- **景点**：冈仁波齐峰、玛旁雍错
-- **感受**：世界中心的神山，心灵净化之旅
+  <div class="timeline-item">
+    <div class="timeline-dot">
+      <div class="dot-inner"></div>
+    </div>
+    <div class="timeline-card">
+      <div class="card-header">
+        <div class="travel-icon">🌊</div>
+        <div class="travel-info">
+          <h3>羊卓雍错</h3>
+          <div class="travel-meta">
+            <span class="travel-date">2023年X月</span>
+            <span class="travel-location">📍 羊湖</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="travel-highlights">
+          <div class="highlight-item">
+            <span class="highlight-label">景点</span>
+            <span class="highlight-value">羊湖、卡若拉冰川</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-label">感受</span>
+            <span class="highlight-value">高原蓝宝石，纯净如镜</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-#### 羊卓雍错
-- **时间**：2023年X月
-- **景点**：羊湖、卡若拉冰川
-- **感受**：高原蓝宝石，纯净如镜
+  <div class="timeline-item">
+    <div class="timeline-dot">
+      <div class="dot-inner"></div>
+    </div>
+    <div class="timeline-card">
+      <div class="card-header">
+        <div class="travel-icon">🌸</div>
+        <div class="travel-info">
+          <h3>日本之旅</h3>
+          <div class="travel-meta">
+            <span class="travel-date">2023年X月</span>
+            <span class="travel-location">📍 日本</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="travel-highlights">
+          <div class="highlight-item">
+            <span class="highlight-label">景点</span>
+            <span class="highlight-value">东京、京都、大阪</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-label">感受</span>
+            <span class="highlight-value">现代科技与传统文化的完美融合</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-#### 日本之旅
-- **时间**：2023年X月
-- **景点**：东京、京都、大阪
-- **感受**：现代科技与传统文化的完美融合
+  <div class="timeline-item">
+    <div class="timeline-dot">
+      <div class="dot-inner"></div>
+    </div>
+    <div class="timeline-card">
+      <div class="card-header">
+        <div class="travel-icon">🏜️</div>
+        <div class="travel-info">
+          <h3>新疆之行</h3>
+          <div class="travel-meta">
+            <span class="travel-date">2023年X月</span>
+            <span class="travel-location">📍 新疆</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="travel-highlights">
+          <div class="highlight-item">
+            <span class="highlight-label">景点</span>
+            <span class="highlight-value">天山、吐鲁番、喀什</span>
+          </div>
+          <div class="highlight-item">
+            <span class="highlight-label">感受</span>
+            <span class="highlight-value">大漠风光，丝路文化，美食天堂</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-#### 新疆之行
-- **时间**：2023年X月
-- **景点**：天山、吐鲁番、喀什
-- **感受**：大漠风光，丝路文化，美食天堂
+<style scoped>
+.travel-timeline {
+  position: relative;
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.travel-timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, 
+    #667eea 0%, 
+    #764ba2 25%, 
+    #f093fb 50%, 
+    #f5576c 75%, 
+    #4facfe 100%);
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.timeline-item:nth-child(odd) {
+  flex-direction: row;
+}
+
+.timeline-item:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background: white;
+  border: 4px solid #667eea;
+  border-radius: 50%;
+  z-index: 10;
+  box-shadow: 0 0 0 6px rgba(102, 126, 234, 0.1);
+  transition: all 0.3s ease;
+}
+
+.timeline-dot:hover {
+  transform: translate(-50%, -50%) scale(1.2);
+  box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.2);
+}
+
+.dot-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: #667eea;
+  border-radius: 50%;
+}
+
+.timeline-card {
+  width: 45%;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.timeline-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.travel-icon {
+  font-size: 32px;
+  margin-right: 16px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.travel-info h3 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.travel-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.travel-date {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 8px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.travel-location {
+  font-weight: 500;
+}
+
+.card-content {
+  padding: 20px;
+}
+
+.travel-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.highlight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.highlight-label {
+  min-width: 60px;
+  font-weight: 600;
+  color: #667eea;
+  font-size: 14px;
+  padding: 4px 8px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.highlight-value {
+  flex: 1;
+  color: #4a5568;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .travel-timeline::before {
+    left: 30px;
+  }
+  
+  .timeline-item {
+    flex-direction: row !important;
+    margin-bottom: 40px;
+  }
+  
+  .timeline-dot {
+    left: 30px;
+  }
+  
+  .timeline-card {
+    width: calc(100% - 60px);
+    margin-left: 60px;
+  }
+  
+  .card-header {
+    padding: 16px;
+  }
+  
+  .travel-icon {
+    font-size: 24px;
+    margin-right: 12px;
+  }
+  
+  .travel-info h3 {
+    font-size: 18px;
+  }
+  
+  .travel-meta {
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .card-content {
+    padding: 16px;
+  }
+  
+  .highlight-item {
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .highlight-label {
+    min-width: auto;
+    align-self: flex-start;
+  }
+}
+</style>
 
 ---
 
