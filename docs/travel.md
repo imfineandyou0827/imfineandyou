@@ -148,7 +148,7 @@ onMounted(() => {
         photos: [
           { url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', caption: '天山天池' },
           { url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', caption: '吐鲁番葡萄' },
-          { url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', caption: '喀什古城' }
+          { url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1080&h=1080&fit=crop', caption: '喀什古城' }
         ]
       }
     ]
@@ -217,7 +217,7 @@ onMounted(() => {
       function updateGallery() {
         const photo = photos[currentIndex]
         modal.innerHTML = `
-          <div style="text-align: center; max-width: 90%; max-height: 90%; position: relative;">
+          <div style="text-align: center; max-width: 90%; max-height: 90%; position: relative; min-height: 600px; display: flex; flex-direction: column; justify-content: space-between;">
             <div style="position: absolute; top: 20px; left: 20px; color: white; font-size: 18px; z-index: 10001;">
               ${placeName} · ${currentIndex + 1}/${photos.length}
             </div>
