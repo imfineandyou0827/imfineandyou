@@ -7,8 +7,6 @@ tags:
   - 笔记
 summary: CRTP
 ---
-# C++设计模式笔记——CRTP
-
 CRTP(curiously recurring template pattern, 奇异递归模式)，这个名字奇怪的模式，是一种将继承和静态多态结合的技术。
 
 > 多态是一种用单个统一的符号将多种特定行为关联起来的能力，是面向对象编的基石，在 C++中它主要由继承和虚函数实现。由于这一机制主要（至少是一部分）在运行期间起作用，因此我们称之为动态多态（dynamic polymorphism）。它也是我们通常在讨论 C++中的简单多态时所指的多态。但是，模板也允许我们用单个统一符号将不同的特定行为 关联起来，不过该关联主要发生在编译期间，我们称之为静态多态（static polymorphism）。                                                                                     
@@ -20,12 +18,11 @@ CRTP(curiously recurring template pattern, 奇异递归模式)，这个名字奇
 接下来将举一个例子，分别用动态多态、静态多态和CRTP实现，例子原型来自：
 
 Curiously Recurring Template Patternen.cppreference.com/w/cpp/language/crtp
-
 ## 动态多态实现
 
 假设有一个基类Base,其中有一个纯虚函数impl()
 
-```cpp
+```
 class Base
 {
 public:
@@ -35,13 +32,13 @@ public:
 
 接着有两个Base的派生类:D1,D2,各自实现了impl()函数:
 
-```cpp
+```
 class D1:public Base
 {
 public:
     virtual void impl() override
     {
-        std::cout&lt;&lt;"D1:impl()"&lt;&lt;std::endl;
+        std::cout<<"D1:impl()"<<std::endl;
     }
 };
 
@@ -50,14 +47,14 @@ class D2:public Base
 public:
     virtual void impl() override
     {
-        std::cout&lt;&lt;"D2:impl()"&lt;&lt;std::endl;
+        std::cout<<"D2:impl()"<<std::endl;
     }
 };
 ```
 
 我们可以在函数中调用：
 
-```cpp
+```
 void exec(Base &obj)
 {
     obj.impl();
@@ -75,22 +72,22 @@ int main()
 
 结果就会打印输出：
 
-```cpp
+```
 D1::impl()
 D2::impl()
 ```
 
-## **静态多态实现**
+##**静态多态实现**
 
 同样可以用静态多态来实现上面的功能，静态多态通过模板来实现，首先同样是定义类D1和D2,不同的是这回它们不再是派生类：
 
-```cpp
+```
 class D1
 {
 public:
     void impl() 
     {
-        std::cout&lt;&lt;"D1:impl()"&lt;&lt;std::endl;
+        std::cout<<"D1:impl()"<<std::endl;
     }
 };
 
@@ -99,15 +96,15 @@ class D2
 public:
     void impl() 
     {
-        std::cout&lt;&lt;"D2:impl()"&lt;&lt;std::endl;
+        std::cout<<"D2:impl()"<<std::endl;
     }
 };
 ```
 
 接着实现一个模板函数:
 
-```cpp
-template &lt;typename T&gt;
+```
+template <typename T>
 void exec(T obj)
 {
     obj.impl();
@@ -116,7 +113,7 @@ void exec(T obj)
 
 我们就可以调用这个函数达到多态的目的：
 
-```cpp
+```
 int main()
 {
     D1 d1;
@@ -129,7 +126,7 @@ int main()
 
 结果同样会打印输出：
 
-```cpp
+```
 D1::impl()
 D2::impl()
 ```
@@ -142,46 +139,47 @@ CRTP模式将继承和静态多态结合，既能通过静态多态提升性能�
 
 首先定义一个模板基类Base:
 
-```cpp
-template &lt;typename T&gt;
+```
+template <typename T>
 class Base
 {
     void impl()
     {
-        static_cast&lt;T *&gt;(this)-&gt;impl();
+        static_cast<T *>(this)->impl();
     }
     void exec()
     {
-        std::cout&lt;&lt;"Base::exec()"&lt;&lt;std::endl;
+        std::cout<<"Base::exec()"<<std::endl;
     }
-};
+}
 ```
 
 接着D1和D2分别将自己作为模板参数传递给Base：
 
-```cpp
-class D1:Base&lt;D1&gt;
+```
+class D1:Base<D1>
 {
 public:
     void impl() 
     {
-        std::cout&lt;&lt;"D1:impl()"&lt;&lt;std::endl;
+        std::cout<<"D1:impl()"<<std::endl;
     }
 };
 
-class D2:Base&lt;D2&gt;
+class D2:Base<D2>
 {
 public:
     void impl() 
     {
-        std::cout&lt;&lt;"D2:impl()"&lt;&lt;std::endl;
+        std::cout<<"D2:impl()"<<std::endl;
     }
 };
+
 ```
 
 我们就可以使用：
 
-```cpp
+```
 int main()
 {
     D1 d1;
@@ -196,16 +194,15 @@ int main()
 
 输出结果是：
 
-```cpp
+```
 D1::impl()
 D2::impl()
 Base::exec()
 Base::exec()
 ```
 
+
 **CRTP的缺点**
 
 CRTP的例子中我们可以发现，D1和D2缺少共同的基类，没错，D1和D2继承的不是同一个基类。 D1的基类是Base&lt;D1&gt;,D2的基类是Base&lt;D2&gt;。
-
-> 因此，每当需要一个共同的基类时，例如，为了在一个集合中存储不同类型而需要的共同抽象，CRTP设计模式就不是正确的选择。                                                                                
-
+> 因此，每当需要一个共同的基类时，例如，为了在一个集合中存储不同类型而需要的共同抽象，CRTP设计模式就不是正确的选择。       
