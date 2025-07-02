@@ -11,10 +11,10 @@ hero:
   actions:
     - theme: brand
       text: Get Started
-      link: /bigFrontEnd/html/
+      link: /travel
     - theme: alt
       text: View on GitHub
-      link: https://github.com/vuejs/vitepress
+      link: https://github.com/imfineandyou0827
 ---
 
 <style>
