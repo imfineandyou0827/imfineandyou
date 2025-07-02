@@ -22,6 +22,9 @@ jobs:
           corepack enable
           pnpm install --frozen-lockfile || npm ci
 
+      - name: Generate notes index
+        run: node generate-notes-index.js
+
       - name: Build VitePress site
         run: pnpm run build
 
