@@ -41,7 +41,7 @@ class D1:public Base
 public:
     virtual void impl() override
     {
-        std::cout<<"D1:impl()"<<std::endl;
+        std::cout&lt;&lt;"D1:impl()"&lt;&lt;std::endl;
     }
 };
 
@@ -50,7 +50,7 @@ class D2:public Base
 public:
     virtual void impl() override
     {
-        std::cout<<"D2:impl()"<<std::endl;
+        std::cout&lt;&lt;"D2:impl()"&lt;&lt;std::endl;
     }
 };
 ```
@@ -90,7 +90,7 @@ class D1
 public:
     void impl() 
     {
-        std::cout<<"D1:impl()"<<std::endl;
+        std::cout&lt;&lt;"D1:impl()"&lt;&lt;std::endl;
     }
 };
 
@@ -99,7 +99,7 @@ class D2
 public:
     void impl() 
     {
-        std::cout<<"D2:impl()"<<std::endl;
+        std::cout&lt;&lt;"D2:impl()"&lt;&lt;std::endl;
     }
 };
 ```
@@ -107,7 +107,7 @@ public:
 接着实现一个模板函数:
 
 ```cpp
-template <typename T>
+template &lt;typename T&gt;
 void exec(T obj)
 {
     obj.impl();
@@ -143,16 +143,16 @@ CRTP模式将继承和静态多态结合，既能通过静态多态提升性能�
 首先定义一个模板基类Base:
 
 ```cpp
-template <typename T>
+template &lt;typename T&gt;
 class Base
 {
     void impl()
     {
-        static_cast<T *>(this)->impl();
+        static_cast&lt;T *&gt;(this)-&gt;impl();
     }
     void exec()
     {
-        std::cout<<"Base::exec()"<<std::endl;
+        std::cout&lt;&lt;"Base::exec()"&lt;&lt;std::endl;
     }
 };
 ```
@@ -160,21 +160,21 @@ class Base
 接着D1和D2分别将自己作为模板参数传递给Base：
 
 ```cpp
-class D1:Base<D1>
+class D1:Base&lt;D1&gt;
 {
 public:
     void impl() 
     {
-        std::cout<<"D1:impl()"<<std::endl;
+        std::cout&lt;&lt;"D1:impl()"&lt;&lt;std::endl;
     }
 };
 
-class D2:Base<D2>
+class D2:Base&lt;D2&gt;
 {
 public:
     void impl() 
     {
-        std::cout<<"D2:impl()"<<std::endl;
+        std::cout&lt;&lt;"D2:impl()"&lt;&lt;std::endl;
     }
 };
 ```
@@ -205,7 +205,7 @@ Base::exec()
 
 **CRTP的缺点**
 
-CRTP的例子中我们可以发现，D1和D2缺少共同的基类，没错，D1和D2继承的不是同一个基类。 D1的基类是Base<D1>,D2的基类是Base<D2>。
+CRTP的例子中我们可以发现，D1和D2缺少共同的基类，没错，D1和D2继承的不是同一个基类。 D1的基类是Base&lt;D1&gt;,D2的基类是Base&lt;D2&gt;。
 
 > 因此，每当需要一个共同的基类时，例如，为了在一个集合中存储不同类型而需要的共同抽象，CRTP设计模式就不是正确的选择。                                                                                
 
