@@ -10,16 +10,25 @@
 <script setup>
 import { onMounted } from 'vue'
 
+let regionPhotos = {};
+
 onMounted(() => {
   // 动态加载高德地图 JS API
   const script = document.createElement('script')
   script.src = 'https://webapi.amap.com/maps?v=2.0&key=2b8f301df116637eb0206846d8e5c054'
-  
+
+  // 自动加载照片索引
+  fetch('/imfineandyou/photos/photos.json')
+    .then(res => res.json())
+    .then(data => {
+      regionPhotos = data;
+    });
+
   script.onload = () => {
     // 初始化地图，缩放级别调高
     const map = new AMap.Map('travel-map', {
-      zoom: 8,
-      center: [104.1954, 35.8617], // 中国中心位置
+      zoom: 7,
+      center: [91.1322, 29.6604], // 西藏拉萨附近
       mapStyle: 'amap://styles/whitesmoke',
       features: ['bg', 'road', 'building', 'point']
     })
@@ -205,25 +214,20 @@ onMounted(() => {
       });
       marker.setMap(map);
 
-      // 创建信息窗体内容
+      // 创建信息窗体内容，照片预览自动取 regionPhotos
+      let previewImg = '';
+      let photoCount = 0;
+      if (regionPhotos[place.name] && regionPhotos[place.name].length > 0) {
+        previewImg = `<img src='${regionPhotos[place.name][0].url}' style='width: 200px; height: 150px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid #ddd; margin-bottom: 8px;' onclick=\"showPhotoGallery('${place.name}')\" title='点击查看所有照片'>`;
+        photoCount = regionPhotos[place.name].length;
+      }
       const infoContent = `
-        <div style="text-align: center; min-width: 200px; padding: 10px;">
-          <div style="font-size: 24px; margin-bottom: 8px;">${place.icon}</div>
+        <div style="text-align: center; min-width: 220px; padding: 10px;">
+          <div style='font-size: 32px; margin-bottom: 8px;'>${place.icon || ''}</div>
           <h3 style="margin: 0 0 8px 0; color: #333;">${place.name}</h3>
-          <p style="margin: 0 0 4px 0; color: #666;">${place.description}</p>
-          <p style="margin: 0 0 12px 0; color: #999; font-size: 12px;">${place.date}</p>
-          ${place.photos && place.photos.length > 0 ? `
-            <div style="margin-top: 12px;">
-              <img src="${place.photos[0].url}" 
-                   alt="${place.photos[0].caption}" 
-                   style="width: 200px; height: 150px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid #ddd; margin-bottom: 8px;"
-                   onclick="showPhotoGallery('${place.name}')"
-                   title="点击查看所有照片">
-              <div style="font-size: 12px; color: #666;">
-                📸 ${place.photos.length} 张照片 · 点击查看
-              </div>
-            </div>
-          ` : ''}
+          <p style="margin: 0 0 4px 0; color: #666;">${place.description || ''}</p>
+          <p style="margin: 0 0 12px 0; color: #999; font-size: 12px;">${place.date || ''}</p>
+          ${previewImg ? `<div style='margin-top: 12px;'>${previewImg}<div style='font-size: 12px; color: #666;'>📸 ${photoCount} 张照片 · 点击查看</div></div>` : ''}
         </div>
       `;
 
@@ -256,99 +260,59 @@ onMounted(() => {
     `
     document.getElementById('travel-map').appendChild(legend)
 
-    // 全局变量存储照片数据
-    window.placePhotos = {}
-    places.forEach(place => {
-      window.placePhotos[place.name] = place.photos
-    })
-
-    // 全局函数：显示照片画廊
+    // 全局函数：显示照片画廊，自动读取 regionPhotos
     window.showPhotoGallery = function(placeName) {
-      const photos = window.placePhotos[placeName]
-      if (!photos || photos.length === 0) return
-      
-      let currentIndex = 0
-      
-      // 创建模态框
-      const modal = document.createElement('div')
-      modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.9);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10000;
-      `
-      
+      const photos = regionPhotos[placeName] || [];
+      if (!photos.length) return;
+      let currentIndex = 0;
+      const modal = document.createElement('div');
+      modal.style.cssText = `position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 10000;`;
       function updateGallery() {
-        const photo = photos[currentIndex]
+        const photoObj = photos[currentIndex];
         modal.innerHTML = `
-          <div style="text-align: center; width: 100%; height: 100%; position: relative;">
-            <div style="position: absolute; top: 20px; left: 20px; color: white; font-size: 18px; z-index: 10001;">
-              ${placeName} · ${currentIndex + 1}/${photos.length}
+          <div style="background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.18); padding: 32px 24px 24px 24px; min-width: 320px; max-width: 100vw; max-height: 98vh; display: flex; flex-direction: column; align-items: center; position: relative;">
+            <div style="position: absolute; top: 16px; right: 16px; color: #888; font-size: 28px; cursor: pointer;" onclick="this.parentElement.parentElement.remove()">✕</div>
+            <div style="width: 100%; height: 70vh; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; background: #f8f8f8;">
+              <img src="${photoObj.url}" style="max-width: 98vw; max-height: 100%; object-fit: contain; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
             </div>
-            <div style="position: absolute; top: 20px; right: 20px; color: white; font-size: 24px; cursor: pointer; z-index: 10001;" onclick="this.parentElement.parentElement.remove()">
-              ✕
-            </div>
-            
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 90%; max-height: 70vh;">
-              <img src="${photo.url}" 
-                   alt="${photo.caption}" 
-                   style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px;">
-            </div>
-            
-            <div style="position: absolute; bottom: 120px; left: 50%; transform: translateX(-50%); color: white; font-size: 16px;">${photo.caption}</div>
-            
+            <div style="color: #444; font-size: 15px; margin-bottom: 12px;">${photoObj.caption || placeName}</div>
             ${photos.length > 1 ? `
-              <div style="position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);">
-                <button onclick="changePhoto(-1)" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-right: 10px;">← 上一张</button>
-                <button onclick="changePhoto(1)" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer;">下一张 →</button>
+              <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                <button onclick="changePhoto(-1)" style="background: #f0f0f0; border: none; color: #333; padding: 8px 16px; border-radius: 5px; cursor: pointer;">← 上一张</button>
+                <button onclick="changePhoto(1)" style="background: #f0f0f0; border: none; color: #333; padding: 8px 16px; border-radius: 5px; cursor: pointer;">下一张 →</button>
               </div>
-              <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px;">
+              <div style="display: flex; gap: 8px; margin-bottom: 8px;">
                 ${photos.map((_, index) => `
-                  <div onclick="goToPhoto(${index})" 
-                       style="width: 12px; height: 12px; border-radius: 50%; background: ${index === currentIndex ? 'white' : 'rgba(255,255,255,0.3)'}; cursor: pointer;"></div>
+                  <div onclick="goToPhoto(${index})" style="width: 12px; height: 12px; border-radius: 50%; background: ${index === currentIndex ? '#7ed6a7' : '#eee'}; cursor: pointer;"></div>
                 `).join('')}
               </div>
             ` : ''}
           </div>
-        `
+        `;
       }
-      
-      // 切换照片函数
       window.changePhoto = function(direction) {
-        currentIndex = (currentIndex + direction + photos.length) % photos.length
-        updateGallery()
+        currentIndex = (currentIndex + direction + photos.length) % photos.length;
+        updateGallery();
       }
-      
-      // 跳转到指定照片
       window.goToPhoto = function(index) {
-        currentIndex = index
-        updateGallery()
+        currentIndex = index;
+        updateGallery();
       }
-      
-      updateGallery()
-      document.body.appendChild(modal)
-      
-      // 键盘控制
+      updateGallery();
+      document.body.appendChild(modal);
       const handleKeydown = (e) => {
         if (e.key === 'Escape') {
-          document.body.removeChild(modal)
-          document.removeEventListener('keydown', handleKeydown)
+          document.body.removeChild(modal);
+          document.removeEventListener('keydown', handleKeydown);
         } else if (e.key === 'ArrowLeft') {
-          changePhoto(-1)
+          changePhoto(-1);
         } else if (e.key === 'ArrowRight') {
-          changePhoto(1)
+          changePhoto(1);
         }
       }
-      document.addEventListener('keydown', handleKeydown)
+      document.addEventListener('keydown', handleKeydown);
     }
   }
-  
   document.head.appendChild(script)
 })
 </script>
