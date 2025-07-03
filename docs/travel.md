@@ -33,24 +33,24 @@ onMounted(() => {
       features: ['bg', 'road', 'building', 'point']
     })
 
-    // 你去过的省/市关键词
+    // 你去过的市关键词
     const visited = [
-      '北京市', '上海市', '重庆市', '西藏自治区', '新疆维吾尔自治区'
-    ]
+      '杭州市', '拉萨市', '乌鲁木齐市', '北京市', '上海市', '重庆市' // 你实际去过的市名，注意不要加 ... 注释
+    ];
 
     // 完全仿照截图风格的高亮配色
     const highlightStroke = '#7ed6a7';
     const highlightFill = '#e6f7ec';
     const normalStroke = '#b3c6e0';
 
-    // 加载GeoJSON插件后再加载省级GeoJSON并高亮去过的区域
+    // 加载GeoJSON插件后再加载市级GeoJSON并高亮去过的区域
     AMap.plugin(['AMap.GeoJSON'], function() {
-      fetch('/imfineandyou/geojson/china-provinces.json')
+      fetch('/imfineandyou/geojson/china-cities-full.geojson')
         .then(res => res.json())
         .then(geojson => {
           geojson.features.forEach(feature => {
             const name = feature.properties.name;
-            const isVisited = visited.some(v => name.includes(v));
+            const isVisited = visited.includes(name);
             const coords = feature.geometry.coordinates;
             if (feature.geometry.type === 'MultiPolygon') {
               coords.forEach(subPath => {
