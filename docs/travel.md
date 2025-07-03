@@ -4,41 +4,80 @@
 
 ## 我的足迹地图
 
-<div id="travel-map" style="height: 500px; width: 100%; border-radius: 8px; margin: 20px 0;"></div>
+<div id="travel-map"
+     style="width: 90vw; height: 90vw; max-width: 900px; max-height: 900px; margin: 32px auto; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); display: block;"></div>
 
 <script setup>
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  // 动态加载 Leaflet CSS
-  const link = document.createElement('link')
-  link.rel = 'stylesheet'
-  link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
-  link.integrity = 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY='
-  link.crossOrigin = ''
-  document.head.appendChild(link)
-
-  // 动态加载 Leaflet JS
+  // 动态加载高德地图 JS API
   const script = document.createElement('script')
-  script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
-  script.integrity = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo='
-  script.crossOrigin = ''
+  script.src = 'https://webapi.amap.com/maps?v=2.0&key=2b8f301df116637eb0206846d8e5c054'
   
   script.onload = () => {
-    // 初始化地图
-    const map = L.map('travel-map').setView([35.8617, 104.1954], 4) // 中国中心位置
+    // 初始化地图，缩放级别调高
+    const map = new AMap.Map('travel-map', {
+      zoom: 8,
+      center: [104.1954, 35.8617], // 中国中心位置
+      mapStyle: 'amap://styles/whitesmoke',
+      features: ['bg', 'road', 'building', 'point']
+    })
 
-    // 添加 OpenStreetMap 图层
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map)
+    // 你去过的省/市关键词
+    const visited = [
+      '北京市', '上海市', '重庆市', '西藏自治区', '新疆维吾尔自治区'
+    ]
+
+    // 完全仿照截图风格的高亮配色
+    const highlightStroke = '#7ed6a7';
+    const highlightFill = '#e6f7ec';
+    const normalStroke = '#b3c6e0';
+
+    // 加载GeoJSON插件后再加载省级GeoJSON并高亮去过的区域
+    AMap.plugin(['AMap.GeoJSON'], function() {
+      fetch('/imfineandyou/geojson/china-provinces.json')
+        .then(res => res.json())
+        .then(geojson => {
+          geojson.features.forEach(feature => {
+            const name = feature.properties.name;
+            const isVisited = visited.some(v => name.includes(v));
+            const coords = feature.geometry.coordinates;
+            if (feature.geometry.type === 'MultiPolygon') {
+              coords.forEach(subPath => {
+                const polygon = new AMap.Polygon({
+                  path: subPath[0],
+                  strokeColor: isVisited ? highlightStroke : normalStroke,
+                  fillColor: isVisited ? highlightFill : '#ffffff',
+                  fillOpacity: isVisited ? 0.6 : 0,
+                  strokeWeight: 1.5,
+                  zIndex: 100,
+                  extData: { name }
+                });
+                polygon.setMap(map);
+              });
+            } else if (feature.geometry.type === 'Polygon') {
+              const polygon = new AMap.Polygon({
+                path: coords[0],
+                strokeColor: isVisited ? highlightStroke : normalStroke,
+                fillColor: isVisited ? highlightFill : '#ffffff',
+                fillOpacity: isVisited ? 0.6 : 0,
+                strokeWeight: 1.5,
+                zIndex: 100,
+                extData: { name }
+              });
+              polygon.setMap(map);
+            }
+          });
+        });
+    });
 
     // 去过的地方数据
     const places = [
       {
         name: '北京',
-        lat: 39.9042,
         lng: 116.4074,
+        lat: 39.9042,
         description: '首都，历史文化名城',
         date: '2023年',
         icon: '🏛️',
@@ -51,8 +90,8 @@ onMounted(() => {
       },
       {
         name: '上海',
-        lat: 31.2304,
         lng: 121.4737,
+        lat: 31.2304,
         description: '魔都，现代化大都市',
         date: '2023年',
         icon: '🌆',
@@ -64,8 +103,8 @@ onMounted(() => {
       },
       {
         name: '杭州',
-        lat: 30.2741,
         lng: 120.1551,
+        lat: 30.2741,
         description: '人间天堂，西湖美景',
         date: '2023年',
         icon: '🏞️',
@@ -77,8 +116,8 @@ onMounted(() => {
       },
       {
         name: '拉萨',
-        lat: 29.6500,
         lng: 91.1000,
+        lat: 29.6500,
         description: '雪域高原，布达拉宫',
         date: '2023年',
         icon: '🏔️',
@@ -90,8 +129,8 @@ onMounted(() => {
       },
       {
         name: '冈仁波齐',
-        lat: 31.0667,
         lng: 81.3125,
+        lat: 31.0667,
         description: '神山，世界中心',
         date: '2023年',
         icon: '⛰️',
@@ -103,8 +142,8 @@ onMounted(() => {
       },
       {
         name: '玛旁雍错',
-        lat: 30.6667,
         lng: 81.3333,
+        lat: 30.6667,
         description: '圣湖，三大圣湖之一',
         date: '2023年',
         icon: '💧',
@@ -115,8 +154,8 @@ onMounted(() => {
       },
       {
         name: '羊湖',
-        lat: 29.0000,
         lng: 90.5000,
+        lat: 29.0000,
         description: '羊卓雍错，高原蓝宝石',
         date: '2023年',
         icon: '🌊',
@@ -127,8 +166,8 @@ onMounted(() => {
       },
       {
         name: '日本',
-        lat: 36.2048,
         lng: 138.2529,
+        lat: 36.2048,
         description: '樱花之国，现代与传统',
         date: '2023年',
         icon: '🌸',
@@ -140,8 +179,8 @@ onMounted(() => {
       },
       {
         name: '新疆',
-        lat: 43.8256,
         lng: 87.6168,
+        lat: 43.8256,
         description: '大美新疆，丝路明珠',
         date: '2023年',
         icon: '🏜️',
@@ -155,45 +194,67 @@ onMounted(() => {
 
     // 添加标记点
     places.forEach(place => {
-      const marker = L.marker([place.lat, place.lng])
-        .addTo(map)
-        .bindPopup(`
-          <div style="text-align: center; min-width: 200px;">
-            <div style="font-size: 24px; margin-bottom: 8px;">${place.icon}</div>
-            <h3 style="margin: 0 0 8px 0; color: #333;">${place.name}</h3>
-            <p style="margin: 0 0 4px 0; color: #666;">${place.description}</p>
-            <p style="margin: 0 0 12px 0; color: #999; font-size: 12px;">${place.date}</p>
-            ${place.photos && place.photos.length > 0 ? `
-              <div style="margin-top: 12px;">
-                <img src="${place.photos[0].url}" 
-                     alt="${place.photos[0].caption}" 
-                     style="width: 200px; height: 150px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid #ddd; margin-bottom: 8px;"
-                     onclick="showPhotoGallery('${place.name}')"
-                     title="点击查看所有照片">
-                <div style="font-size: 12px; color: #666;">
-                  📸 ${place.photos.length} 张照片 · 点击查看
-                </div>
+      const marker = new AMap.Marker({
+        position: [place.lng, place.lat],
+        icon: new AMap.Icon({
+          image: '/imfineandyou/location.png',
+          size: new AMap.Size(20, 20),
+          imageSize: new AMap.Size(20, 20)
+        }),
+        offset: new AMap.Pixel(-10, -20)
+      });
+      marker.setMap(map);
+
+      // 创建信息窗体内容
+      const infoContent = `
+        <div style="text-align: center; min-width: 200px; padding: 10px;">
+          <div style="font-size: 24px; margin-bottom: 8px;">${place.icon}</div>
+          <h3 style="margin: 0 0 8px 0; color: #333;">${place.name}</h3>
+          <p style="margin: 0 0 4px 0; color: #666;">${place.description}</p>
+          <p style="margin: 0 0 12px 0; color: #999; font-size: 12px;">${place.date}</p>
+          ${place.photos && place.photos.length > 0 ? `
+            <div style="margin-top: 12px;">
+              <img src="${place.photos[0].url}" 
+                   alt="${place.photos[0].caption}" 
+                   style="width: 200px; height: 150px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid #ddd; margin-bottom: 8px;"
+                   onclick="showPhotoGallery('${place.name}')"
+                   title="点击查看所有照片">
+              <div style="font-size: 12px; color: #666;">
+                📸 ${place.photos.length} 张照片 · 点击查看
               </div>
-            ` : ''}
-          </div>
-        `)
-    })
+            </div>
+          ` : ''}
+        </div>
+      `;
+
+      const infoWindow = new AMap.InfoWindow({
+        content: infoContent,
+        offset: new AMap.Pixel(0, -30)
+      });
+
+      // 点击标记显示信息窗体
+      marker.on('click', () => {
+        infoWindow.open(map, marker.getPosition());
+      });
+    });
 
     // 添加图例
-    const legend = L.control({ position: 'bottomright' })
-    legend.onAdd = function() {
-      const div = L.DomUtil.create('div', 'info legend')
-      div.style.backgroundColor = 'white'
-      div.style.padding = '10px'
-      div.style.borderRadius = '5px'
-      div.style.boxShadow = '0 0 15px rgba(0,0,0,0.2)'
-      div.innerHTML = `
-        <h4 style="margin: 0 0 10px 0;">我的足迹</h4>
-        <p style="margin: 0; color: #666;">点击标记查看详情和照片</p>
-      `
-      return div
-    }
-    legend.addTo(map)
+    const legend = document.createElement('div')
+    legend.style.cssText = `
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      z-index: 1000;
+    `
+    legend.innerHTML = `
+      <h4 style="margin: 0 0 10px 0;">我的足迹</h4>
+      <p style="margin: 0; color: #666;">点击标记查看详情和照片</p>
+    `
+    document.getElementById('travel-map').appendChild(legend)
 
     // 全局变量存储照片数据
     window.placePhotos = {}
@@ -295,17 +356,6 @@ onMounted(() => {
 <style scoped>
 #travel-map {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* 自定义弹窗样式 */
-:deep(.leaflet-popup-content-wrapper) {
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-:deep(.leaflet-popup-content) {
-  margin: 0;
-  padding: 0;
 }
 </style>
 
